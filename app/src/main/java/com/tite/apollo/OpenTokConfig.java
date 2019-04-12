@@ -9,9 +9,9 @@ public class OpenTokConfig {
     // Replace with your OpenTok API key
     public static final String API_KEY = "46303002";
     // Replace with a generated Session ID
-    public static final String SESSION_ID = "";
+    public static final String SESSION_ID = "1_MX40NjMwMzAwMn5-MTU1NTA0NTAxNTY0OX53TVFOekhDYzdhT2dnQVNRK1drYmtXWS9-fg";
     // Replace with a generated token (from the dashboard or using an OpenTok server SDK)
-    public static final String TOKEN = "";
+    public static final String TOKEN = "T1==cGFydG5lcl9pZD00NjMwMzAwMiZzaWc9MDVhYjUxNjFmYTM4NzU3MWVmYTZiYzljZjI3YmYxOTA1NTAxYzg5NjpzZXNzaW9uX2lkPTFfTVg0ME5qTXdNekF3TW41LU1UVTFOVEEwTlRBeE5UWTBPWDUzVFZGT2VraERZemRoVDJkblFWTlJLMWRyWW10WFdTOS1mZyZjcmVhdGVfdGltZT0xNTU1MDQ1MDM2Jm5vbmNlPTAuODU1Nzc0NTY4MzUxOTAyNyZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTU1MDQ4NjQ1JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
     /*                           ***** OPTIONAL *****
      If you have set up a server to provide session information replace the null value
