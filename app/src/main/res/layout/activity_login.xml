@@ -28,25 +28,7 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:orientation="vertical">
-
-
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Tokbox"
-                android:onClick="videoChat"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
-
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Force Crash!"
-                android:onClick="forceCrash"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
 
 
             <!--<com.google.android.gms.common.SignInButton-->
@@ -101,8 +83,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="@string/action_log_in"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"></LinearLayout>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:onClick="videoChat"
+                android:text="@string/practice_english" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:onClick="forceCrash"
+                android:text="Force Crash!"
+                android:visibility="gone" />
+
 
         </LinearLayout>
     </ScrollView>
