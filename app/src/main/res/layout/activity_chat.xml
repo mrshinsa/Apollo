@@ -10,11 +10,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <FrameLayout
-            android:id="@+id/subscriber_container"
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center_vertical" />
+        <Button
+            android:id="@+id/button_quit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_quit"
+            tools:layout_editor_absoluteX="306dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <FrameLayout
             android:id="@+id/publisher_container"
@@ -26,6 +28,13 @@
             android:layout_marginBottom="@dimen/publisher_bottom_margin"
             android:background="@color/publisher_border_color"
             android:padding="@dimen/publisher_padding" />
+
+
+        <FrameLayout
+            android:id="@+id/subscriber_container"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="center_vertical" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -61,5 +70,6 @@
 
 
     </FrameLayout>
+
 
 </android.support.constraint.ConstraintLayout>

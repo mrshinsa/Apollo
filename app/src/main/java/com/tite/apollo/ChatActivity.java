@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class ChatActivity extends AppCompatActivity
                                         WebServiceCoordinator.Listener,
                                         Session.SessionListener,
                                         PublisherKit.PublisherListener,
+                                        View.OnClickListener,
                                         SubscriberKit.SubscriberListener{
 
     private static final String LOG_TAG = ChatActivity.class.getSimpleName();
@@ -45,9 +48,22 @@ public class ChatActivity extends AppCompatActivity
     private Session mSession;
     private Publisher mPublisher;
     private Subscriber mSubscriber;
+    private Button quitButton;
+
 
     private FrameLayout mPublisherViewContainer;
     private FrameLayout mSubscriberViewContainer;
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId()) {
+            case R.id.button_quit:
+            {
+                mSession.disconnect();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +76,8 @@ public class ChatActivity extends AppCompatActivity
         // initialize view objects from your layout
         mPublisherViewContainer = (FrameLayout)findViewById(R.id.publisher_container);
         mSubscriberViewContainer = (FrameLayout)findViewById(R.id.subscriber_container);
+        quitButton = findViewById(R.id.button_quit);
+        quitButton.setOnClickListener(this);
 
         requestPermissions();
     }

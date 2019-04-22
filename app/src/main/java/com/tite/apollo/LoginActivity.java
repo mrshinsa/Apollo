@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,14 +31,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.amazonaws.amplify.generated.graphql.CreateTodoMutation;
+import com.amazonaws.amplify.generated.graphql.ListTodosQuery;
+import com.amazonaws.amplify.generated.graphql.OnCreateTodoSubscription;
+import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.amazonaws.mobileconnectors.appsync.AppSyncSubscriptionCall;
+import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers;
+import com.apollographql.apollo.GraphQLCall;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 import com.facebook.CallbackManager;
 
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
+import type.CreateTodoInput;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -68,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private AWSAppSyncClient mAWSAppSyncClient;
 
     CallbackManager callbackManager;
 
@@ -79,6 +94,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         logUser();
 
         setContentView(R.layout.activity_login);
+
+        // setup AWS
+        mAWSAppSyncClient = AWSAppSyncClient.builder()
+                .context(getApplicationContext())
+                .awsConfiguration(new AWSConfiguration(getApplicationContext()))
+                .build();
+
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -399,5 +422,72 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+
+    public void runMutation(){
+        CreateTodoInput createTodoInput = CreateTodoInput.builder().
+                name("Use AppSync").
+                description("Realtime and Offline").
+                build();
+
+        mAWSAppSyncClient.mutate(CreateTodoMutation.builder().input(createTodoInput).build())
+                .enqueue(mutationCallback);
+    }
+
+    private GraphQLCall.Callback<CreateTodoMutation.Data> mutationCallback = new GraphQLCall.Callback<CreateTodoMutation.Data>() {
+        @Override
+        public void onResponse(@Nonnull Response<CreateTodoMutation.Data> response) {
+            Log.i("Results", "Added Todo");
+        }
+
+        @Override
+        public void onFailure(@Nonnull ApolloException e) {
+            Log.e("Error", e.toString());
+        }
+    };
+
+    public void runQuery(){
+        mAWSAppSyncClient.query(ListTodosQuery.builder().build())
+                .responseFetcher(AppSyncResponseFetchers.CACHE_AND_NETWORK)
+                .enqueue(todosCallback);
+    }
+
+    private GraphQLCall.Callback<ListTodosQuery.Data> todosCallback = new GraphQLCall.Callback<ListTodosQuery.Data>() {
+        @Override
+        public void onResponse(@Nonnull Response<ListTodosQuery.Data> response) {
+            Log.i("Results", response.data().listTodos().items().toString());
+        }
+
+        @Override
+        public void onFailure(@Nonnull ApolloException e) {
+            Log.e("ERROR", e.toString());
+        }
+    };
+
+    private AppSyncSubscriptionCall subscriptionWatcher;
+
+    private void subscribe(){
+        OnCreateTodoSubscription subscription = OnCreateTodoSubscription.builder().build();
+        subscriptionWatcher = mAWSAppSyncClient.subscribe(subscription);
+        subscriptionWatcher.execute(subCallback);
+    }
+
+    private AppSyncSubscriptionCall.Callback subCallback = new AppSyncSubscriptionCall.Callback() {
+        @Override
+        public void onResponse(@Nonnull Response response) {
+            Log.i("Response", response.data().toString());
+        }
+
+        @Override
+        public void onFailure(@Nonnull ApolloException e) {
+            Log.e("Error", e.toString());
+        }
+
+        @Override
+        public void onCompleted() {
+            Log.i("Completed", "Subscription completed");
+        }
+    };
+
 }
 
