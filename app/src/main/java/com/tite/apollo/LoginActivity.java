@@ -34,6 +34,12 @@ import android.widget.TextView;
 import com.amazonaws.amplify.generated.graphql.CreateTodoMutation;
 import com.amazonaws.amplify.generated.graphql.ListTodosQuery;
 import com.amazonaws.amplify.generated.graphql.OnCreateTodoSubscription;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.SignInUIOptions;
+import com.amazonaws.mobile.client.UserStateDetails;
+import com.amazonaws.mobile.client.UserStateListener;
+import com.amazonaws.mobile.client.results.SignInResult;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
 import com.amazonaws.mobileconnectors.appsync.AppSyncSubscriptionCall;
@@ -54,12 +60,17 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.amazonaws.mobile.client.UserState.GUEST;
+import static com.amazonaws.mobile.client.UserState.SIGNED_IN;
+import static com.amazonaws.mobile.client.UserState.SIGNED_OUT;
+import static com.amazonaws.mobile.client.UserState.SIGNED_OUT_FEDERATED_TOKENS_INVALID;
+import static com.amazonaws.mobile.client.UserState.SIGNED_OUT_USER_POOLS_TOKENS_INVALID;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-
+    final String TAG = this.toString();
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -93,41 +104,79 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // TODO: Move this to where you establish a user session
         logUser();
 
-        setContentView(R.layout.activity_login);
-
         // setup AWS
         mAWSAppSyncClient = AWSAppSyncClient.builder()
                 .context(getApplicationContext())
                 .awsConfiguration(new AWSConfiguration(getApplicationContext()))
                 .build();
 
+        setContentView(R.layout.activity_login);
 
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+//        // Set up the login form.
+//        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+//        populateAutoComplete();
+//
+//        mPasswordView = (EditText) findViewById(R.id.password);
+//        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+//                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+//                    attemptLogin();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+//
+//        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+//        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                attemptLogin();
+//            }
+//        });
+//
+//        mLoginFormView = findViewById(R.id.login_form);
+//        mProgressView = findViewById(R.id.login_progress);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
+        // Amplify auth
+        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
+                    @Override
+                    public void onResult(UserStateDetails userStateDetails) {
+
+                        Log.i(this.toString(), "onResult: " + userStateDetails.getUserState());
+                        switch (userStateDetails.getUserState()) {
+                            case SIGNED_IN:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        TextView textView = (TextView) findViewById(R.id.login_status);
+                                        textView.setText("Logged IN");
+                                    }
+                                });
+                                break;
+                            case SIGNED_OUT:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        TextView textView = (TextView) findViewById(R.id.login_status);
+                                        textView.setText("Logged OUT");
+                                    }
+                                });
+                                break;
+                            default:
+                                AWSMobileClient.getInstance().signOut();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e(this.toString(), "Initialization error.", e);
+                    }
                 }
-                return false;
-            }
-        });
+        );
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
 
 //        // Facebook login
 //        callbackManager = CallbackManager.Factory.create();
@@ -153,6 +202,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //        SignInButton signInButton = findViewById(R.id.sign_in_button);
 //        signInButton.setSize(SignInButton.SIZE_STANDARD);
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 'this' refers the the current active activity
+        AWSMobileClient.getInstance().showSignIn(
+                this,
+                SignInUIOptions.builder()
+                        .nextActivity(ChatActivity.class)
+                        .build(),
+                new Callback<UserStateDetails>() {
+                    @Override
+                    public void onResult(UserStateDetails result) {
+                        Log.d(TAG, "onResult: " + result.getUserState());
+                        switch (result.getUserState()){
+                            case SIGNED_IN:
+                                Log.i("INIT", "logged in!");
+                                break;
+                            case SIGNED_OUT:
+                                Log.i(TAG, "onResult: User did not choose to sign-in");
+                                break;
+                            default:
+                                AWSMobileClient.getInstance().signOut();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e(TAG, "onError: ", e);
+                    }
+                }
+        );
+    }
+
     private void logUser() {
         // TODO: Use the current user's information
         // You can call any combination of these three methods
@@ -424,7 +509,58 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    public void runMutation(){
+//
+//
+//    AWSMobileClient.getInstance().addUserStateListener(new UserStateListener() {
+//        @Override
+//        public void onUserStateChanged (UserStateDetails userStateDetails){
+//            switch (userStateDetails.getUserState()) {
+//                case SIGNED_OUT:
+//                    // user clicked signout button and signedout
+//                    Log.i("userState", "user signed out");
+//                    break;
+//                case SIGNED_OUT_USER_POOLS_TOKENS_INVALID:
+//                    Log.i("userState", "need to login again.");
+//                    AWSMobileClient.getInstance().signIn(username, password, null, new Callback<SignInResult>() {
+//
+//
+//                    });
+//                    //Alternatively call .showSignIn()
+//                    break;
+//                default:
+//                    Log.i("userState", "unsupported");
+//            }
+//        }
+//    });
+//
+//    AWSMobileClient.getInstance().addUserStateListener(new UserStateListener() {
+//        @Override
+//        public void onUserStateChanged (UserStateDetails userStateDetails){
+//            switch (userStateDetails.getUserState()) {
+//                case GUEST:
+//                    Log.i("userState", "user is in guest mode");
+//                    break;
+//                case SIGNED_OUT:
+//                    Log.i("userState", "user is signed out");
+//                    break;
+//                case SIGNED_IN:
+//                    Log.i("userState", "user is signed in");
+//                    break;
+//                case SIGNED_OUT_USER_POOLS_TOKENS_INVALID:
+//                    Log.i("userState", "need to login again");
+//                    break;
+//                case SIGNED_OUT_FEDERATED_TOKENS_INVALID:
+//                    Log.i("userState", "user logged in via federation, but currently needs new tokens");
+//                    break;
+//                default:
+//                    Log.e("userState", "unsupported");
+//            }
+//        }
+//    });
+
+
+    /******* AWS Amplify *******/
+    public void runMutation() {
         CreateTodoInput createTodoInput = CreateTodoInput.builder().
                 name("Use AppSync").
                 description("Realtime and Offline").
@@ -446,7 +582,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     };
 
-    public void runQuery(){
+    public void runQuery() {
         mAWSAppSyncClient.query(ListTodosQuery.builder().build())
                 .responseFetcher(AppSyncResponseFetchers.CACHE_AND_NETWORK)
                 .enqueue(todosCallback);
@@ -466,7 +602,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private AppSyncSubscriptionCall subscriptionWatcher;
 
-    private void subscribe(){
+    private void subscribe() {
         OnCreateTodoSubscription subscription = OnCreateTodoSubscription.builder().build();
         subscriptionWatcher = mAWSAppSyncClient.subscribe(subscription);
         subscriptionWatcher.execute(subCallback);
