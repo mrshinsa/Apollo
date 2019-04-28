@@ -10,6 +10,8 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.amazonaws.appsync'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -62,6 +64,10 @@ dependencies {
     //For the drop-in UI also:
     implementation 'com.amazonaws:aws-android-sdk-auth-userpools:2.13.+'
     implementation 'com.amazonaws:aws-android-sdk-auth-ui:2.13.+'
+
+    implementation 'com.google.android.gms:play-services-identity:16.0.0'
+    implementation 'com.google.android.gms:play-services-plus:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
 
 
     testImplementation 'junit:junit:4.12'
