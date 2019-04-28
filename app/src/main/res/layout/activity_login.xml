@@ -20,143 +20,143 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <LinearLayout
-            android:id="@+id/login_form"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="124dp"
+            android:orientation="vertical" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="124dp"
-                android:orientation="vertical" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            app:srcCompat="@drawable/logo_on_dark" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                app:srcCompat="@drawable/logo_on_dark" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:orientation="vertical" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:orientation="vertical" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/login_details"
+            android:textColor="@android:color/white" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:orientation="vertical" />
+
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:orientation="vertical" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebook_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:orientation="vertical" />
+
+
+        <!--<Button-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:onClick="videoChat"-->
+        <!--android:text="@string/practice_english" />-->
+
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_centerVertical="true
+        "-->
+        <!--android:onClick="forceCrash"-->
+        <!--android:text="Force Crash!"-->
+        <!--android:visibility="gone" />-->
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/login_status"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="@string/login_details"
-                android:textColor="@android:color/white" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:orientation="vertical" />
-
-            <com.google.android.gms.common.SignInButton
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:orientation="vertical" />
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/facebook_login_button"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:orientation="vertical" />
-
-
-            <!--<Button-->
-                <!--android:layout_width="200dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:onClick="videoChat"-->
-                <!--android:text="@string/practice_english" />-->
-
-            <!--<Button-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:layout_centerVertical="true
-                "-->
-                <!--android:onClick="forceCrash"-->
-                <!--android:text="Force Crash!"-->
-                <!--android:visibility="gone" />-->
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/login_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:orientation="vertical" />
-
-            <Button
-                android:id="@+id/create_account_button"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:textColor="@android:color/white"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_gravity="bottom"
-                android:background="@drawable/rounded_button"
-                android:text="@string/action_create_account"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:orientation="vertical" />
-
-
-            <Button
-                android:id="@+id/login_button2"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:textColor="@android:color/white"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_gravity="bottom"
-                android:background="#00000000"
-                android:text="@string/action_log_in"
-                android:textStyle="bold" />
-
-
+                android:text="TextView" />
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/create_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/action_create_account"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:orientation="vertical" />
+
+
+        <Button
+            android:id="@+id/login_button2"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="#00000000"
+            android:text="@string/action_log_in"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
 </LinearLayout>

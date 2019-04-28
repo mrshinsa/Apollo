@@ -2,10 +2,11 @@
     <string name="app_name">Apollo</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_log_in">Log In</string>
     <string name="action_create_account">Create Account</string>
+    <string name="referral_code">Referral Code(Optional)</string>
 
     <string name="button_quit">Quit</string>
     <string name="login_details">Practice Speaking with Native English Speakers</string>

@@ -127,6 +127,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+        Button createAccountButton = (Button) findViewById(R.id.create_account_button);
+
+        createAccountButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(LoginActivity.this, SignUpActivity.class);
+//                myIntent.putExtra("key", "testExtra"); //Optional parameters
+                startActivity(myIntent);
+            }
+        });
+
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
