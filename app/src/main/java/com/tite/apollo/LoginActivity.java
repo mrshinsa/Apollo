@@ -119,11 +119,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
 
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.login_button2);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button logInButton = (Button) findViewById(R.id.login_button2);
+        logInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+//                attemptLogin();
+
+
+                Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+                startActivity(intent);
             }
         });
 
